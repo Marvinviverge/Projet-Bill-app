@@ -37,6 +37,8 @@ export default class Login {
 
   }
 
+  // Correction BUG n°2
+  // Modification du querySelector employee par admin.
   handleSubmitAdmin = e => {
     e.preventDefault()
     const user = {
@@ -59,6 +61,7 @@ export default class Login {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   login = (user) => {
     if (this.store) {
       return this.store
@@ -74,6 +77,7 @@ export default class Login {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   createUser = (user) => {
     if (this.store) {
       return this.store

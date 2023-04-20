@@ -34,6 +34,9 @@ export default class {
         .list()
         .then(snapshot => {
           const bills = snapshot
+            // Correction BUG n°1
+            // Ajout de la méthode .sort() pour trier les dates de la plus récentes à la plus ancienne.
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
             .map(doc => {
               try {
                 return {
@@ -52,8 +55,7 @@ export default class {
                 }
               }
             })
-          console.log(bills)
-          console.log('length', bills.length)
+
           return bills
         })
     }

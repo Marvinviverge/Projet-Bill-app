@@ -1,6 +1,7 @@
 import VerticalLayout from './VerticalLayout.js'
 import ErrorPage from "./ErrorPage.js"
 import LoadingPage from "./LoadingPage.js"
+import { formatDate } from "../app/format.js"
 
 import Actions from './Actions.js'
 
@@ -19,9 +20,14 @@ const row = (bill) => {
     `)
 }
 
+// Correction BUG n°1
+// Ajout de la méthode .sort() pour trier les dates de la plus récentes à la plus ancienne.
 const rows = (data) => {
-  console.log(data)
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+  return (data && data.length) ? data
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map(bill => row(bill))
+    .join("")
+    : ""
 }
 export default ({ data: bills, loading, error }) => {
 
