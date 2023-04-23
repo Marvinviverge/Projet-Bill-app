@@ -20,16 +20,18 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length - 1]
+    const errorMessage = this.document.querySelector(".message-error");
+    let extension = fileName.split(".").pop() // On récupère l'extension du fichier selectionné
+    const formData = new FormData()
+    const email = JSON.parse(localStorage.getItem("user")).email
+    formData.append('file', file)
+    formData.append('email', email)
 
     // BUG HUNT n°3
     // Empêcher la saisie d'un document qui a une extension différente de jpg, jpeg ou png.
-    let extension = fileName.split(".").pop() // On récupère l'extension du fichier selectionné
 
     if (extension === "jpg" || extension === "jpeg" || extension === "png") {
-      const formData = new FormData()
-      const email = JSON.parse(localStorage.getItem("user")).email
-      formData.append('file', file)
-      formData.append('email', email)
+      errorMessage.classList.add('hidden')// On ajoute la class hidden au message d'erreur dans le cas où elle n'était pas présente.
 
       this.store
         .bills()
@@ -40,17 +42,14 @@ export default class NewBill {
           }
         })
         .then(({ fileUrl, key }) => {
-          console.log(fileUrl)
           this.billId = key
           this.fileUrl = fileUrl
           this.fileName = fileName
         })
         .catch(error => console.error(error))
     } else {
+      errorMessage.classList.remove("hidden");// On retire la class Hidden du message d'erreur
       e.target.value = ""; // On force l'utilisateur à joindre une extension compatible et on lui indique par message ce qu'il doit faire.
-      alert(
-        "Vous devez joindre un fichier avec l'une des extensions suivantes : JPG, JPEG, PNG"
-      );
     }
   }
 
