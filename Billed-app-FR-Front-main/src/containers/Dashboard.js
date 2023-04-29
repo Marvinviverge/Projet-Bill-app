@@ -5,7 +5,7 @@ import { ROUTES_PATH } from '../constants/routes.js'
 import USERS_TEST from '../constants/usersTest.js'
 import Logout from "./Logout.js"
 
-let currentBill = "";
+let currentBill = ""; // On initialise une variable à vide qui servira à récupérer l'id du ticket.
 
 export const filteredBills = (data, status) => {
   console.log(data)
@@ -149,12 +149,14 @@ export default class {
       this.counter++
     }
 
+    // Correction BUG n°4
+    // Utilisation variable currentBill pour parcourir les différents tickets.
     bills.forEach(bill => {
       $(`#open-bill${bill.id}`).click((e) => {
-        if (currentBill !== bill.id) {
+        if (currentBill !== bill.id) { // On vérifie si le ticket selectionné n'a pas le même id que la variable currentBill et si c'est le cas on appelle la fonction handleEditTicket.
           this.handleEditTicket(e, bill, bills)
         }
-        currentBill = bill.id
+        currentBill = bill.id // On mets à jour la variable currentBill avec l'id actuel du ticket pour ne pas appeler plusieurs fois la fonction.
       })
     })
 

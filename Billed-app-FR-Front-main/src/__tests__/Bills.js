@@ -85,24 +85,24 @@ describe("Given I am connected as an employee", () => {
   })
 })
 
-// test d'intégration GET
+// Test d'intégration GET
 describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bills", () => {
     test("then fetch bills mock API GET", async () => {
       const root = document.createElement("div");
       root.setAttribute("id", "root");
       document.body.append(root);
-      router();
+      router(); // On appelle le routeur pour préparer à l'utilisation de la route Bills
       window.onNavigate(ROUTES_PATH.Bills);
       await waitFor(() => screen.getByText("Mes notes de frais"));
-      const title = screen.getByText("Mes notes de frais");
+      const title = screen.getByText("Mes notes de frais"); // On s'attends à voir la chaîne de caractère Mes notes de frais sur la page.
 
       expect(title).toBeTruthy();
     });
 
     describe("When an error occurs on API", () => {
       beforeEach(() => {
-        jest.spyOn(mockStore, "bills");
+        jest.spyOn(mockStore, "bills"); // On espionne la méthode bills.
         const root = document.createElement("div");
         root.setAttribute("id", "root");
         document.body.appendChild(root);
@@ -110,21 +110,22 @@ describe("Given I am a user connected as Employee", () => {
       });
 
       test("fetches bills from an API and fails with 404 message error", async () => {
-        mockStore.bills.mockImplementationOnce(() => {
+        mockStore.bills.mockImplementationOnce(() => { // On simule une méthode list qui renvoit une erreur 404.
           return {
             list: () => {
               return Promise.reject(new Error("Erreur 404"));
             },
           };
         });
+
         window.onNavigate(ROUTES_PATH.Bills);
-        await new Promise(process.nextTick);
+        await new Promise(process.nextTick); // On attends que toutes les tâches soient exécutées.
         const message = await screen.getByTestId("error-message");
-        expect(message.textContent).toContain("404");
+        expect(message.textContent).toContain("404"); // On s'attends à voir la chaîne de caractère 404.
       });
     });
 
-    test("fetches messages from an API and fails with 500 message error", async () => {
+    test("fetches messages from an API and fails with 500 message error", async () => { // On simule une méthode list qui renvoit une erreur 500.
       mockStore.bills.mockImplementationOnce(() => {
         return {
           list: () => {
@@ -136,7 +137,7 @@ describe("Given I am a user connected as Employee", () => {
       window.onNavigate(ROUTES_PATH.Bills);
       await new Promise(process.nextTick);
       const message = await screen.getByTestId("error-message");
-      expect(message.textContent).toContain("500");
+      expect(message.textContent).toContain("500"); // On s'attends à voir la chaîne de caractère 500.
 
     });
   });
